@@ -4,18 +4,19 @@ import {
   FIND_CONTACT,
   INIT_STORE,
 } from "redux/actionType";
+import { v4 as uuidv4 } from "uuid";
 
 export const addContact = (name, number) => ({
   type: ADD_CONTACT,
-  payload: { id: Date.now(), name, number },
+  payload: { id: `${uuidv4()}`, name, number },
 });
 
-export const deleteContact = (id) => ({
+export const deleteContact = (contactId) => ({
   type: DELETE_CONTACT,
-  payload: id,
+  payload: contactId,
 });
 
-export const findContact = (filterName) => ({
+export const filterContact = (filterName) => ({
   type: FIND_CONTACT,
   payload: filterName,
 });

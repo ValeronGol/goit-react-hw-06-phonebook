@@ -6,18 +6,20 @@ import {
   INIT_STORE,
 } from "redux/actionType";
 
-const itemReducer = (state = [], action) => {
+const ContactsReducer = (state = [], action) => {
+  const localstorageKeyName = "contacts";
+
   switch (action.type) {
     case ADD_CONTACT:
       localStorage.setItem(
-        "contacts",
+        localstorageKeyName,
         JSON.stringify([...state, action.payload])
       );
       return [...state, action.payload];
 
     case DELETE_CONTACT:
       const newState = state.filter((el) => el.id !== action.payload);
-      localStorage.setItem("contacts", JSON.stringify(newState));
+      localStorage.setItem(localstorageKeyName, JSON.stringify(newState));
       return newState;
 
     case INIT_STORE:
@@ -37,13 +39,9 @@ const filterReducer = (state = "", action) => {
   }
 };
 
-const reducerContacts = combineReducers({
-  items: itemReducer,
-  filter: filterReducer,
-});
-
 const rootReducer = combineReducers({
-  contacts: reducerContacts,
+  contacts: ContactsReducer,
+  filter: filterReducer,
 });
 
 export default rootReducer;

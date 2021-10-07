@@ -1,61 +1,64 @@
-import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+// import React, { useEffect, useState } from 'react';
+// import { v4 as uuidv4 } from 'uuid';
+import { useSelector, useDispatch } from "react-redux";
+import { getContacts, getFilter } from "redux/selectors";
+import { addContact, deleteContact, filterContact } from "redux/actions";
 import ContactForm from "components/ContactForm/ContactForm";
 import ContactList from "components/ContactList/ContactList";
 import Filter from "components/Filter/Filter";
 import { Conteiner } from "./App.styled";
 
 export default function App() {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState("");
-  const localstorageKeyName = "contacts";
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
+  const dispatch = useDispatch();
+  // const [contacts, setContacts] = useState([]);
+  // const [filter, setFilter] = useState('');
+  // const localstorageKeyName = 'contacts';
 
-  useEffect(() => {
-    const contacts = localStorage.getItem(localstorageKeyName);
-    const parseContacts = JSON.parse(contacts);
-    parseContacts && setContacts(parseContacts);
-  }, []);
+  // useEffect(() => {
+  //   const contacts = localStorage.getItem(localstorageKeyName);
+  //   const parseContacts = JSON.parse(contacts);
+  //   parseContacts && setContacts(parseContacts);
+  // }, []);
 
-  useEffect(() => {
-    localStorage.setItem(localstorageKeyName, JSON.stringify(contacts));
-  }, [contacts]);
+  // useEffect(() => {
+  //   localStorage.setItem(localstorageKeyName, JSON.stringify(contacts));
+  // }, [contacts]);
 
   const formSubmit = ({ name, number }) => {
-    setContacts((prevContacts) => {
-      const newContact = {
-        id: `${uuidv4()}`,
-        name,
-        number,
-      };
-      const duplicateContact = prevContacts.find((contact) => {
-        return contact.name === name;
-      });
-      if (duplicateContact) {
-        alert(`${name} вже є у телефонній книзі!!!`);
-        return [...prevContacts];
-      } else {
-        return setContacts((prevContacts) => [...prevContacts, newContact]);
-      }
+    // setContacts((prevContacts) => {
+    //   const newContact = {
+    //     id: `${uuidv4()}`,
+    //     name,
+    //     number,
+    //   };
+    const duplicateContact = contacts.find((contact) => {
+      return contact.name === name;
     });
+    if (duplicateContact) {
+      alert(`${name} вже є у телефонній книзі!!!`);
+      return [...contacts];
+    } else {
+      return dispatch(addContact(name, number));
+    }
   };
 
-  const deleteContact = (contactId) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter((el) => el.id !== contactId)
-    );
+  const onDelete = (contactId) => {
+    return dispatch(deleteContact(contactId));
   };
 
   const setFilterToState = (filterData) => {
-    setFilter(`${filterData}`);
+    return dispatch(filterContact(`${filterData}`));
   };
 
-  const filterContact = () => {
+  const onFilter = () => {
     return contacts.filter((contact) =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
   };
 
-  const filterContacts = filterContact();
+  const filterContacts = onFilter();
 
   return (
     <Conteiner>
@@ -63,7 +66,7 @@ export default function App() {
       <ContactForm onSubmit={formSubmit} />
       <h1>Contacts</h1>
       <Filter setFilterToState={setFilterToState} />
-      <ContactList contacts={filterContacts} onDelete={deleteContact} />
+      <ContactList contacts={filterContacts} onDelete={onDelete} />
     </Conteiner>
   );
 }

@@ -1,5 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import { v4 as uuidv4 } from 'uuid';
 import { useSelector, useDispatch } from "react-redux";
 import { getContacts, getFilter } from "redux/selectors";
 import { addContact, deleteContact, filterContact } from "redux/actions";
@@ -12,27 +10,8 @@ export default function App() {
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
   const dispatch = useDispatch();
-  // const [contacts, setContacts] = useState([]);
-  // const [filter, setFilter] = useState('');
-  // const localstorageKeyName = 'contacts';
-
-  // useEffect(() => {
-  //   const contacts = localStorage.getItem(localstorageKeyName);
-  //   const parseContacts = JSON.parse(contacts);
-  //   parseContacts && setContacts(parseContacts);
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem(localstorageKeyName, JSON.stringify(contacts));
-  // }, [contacts]);
 
   const formSubmit = ({ name, number }) => {
-    // setContacts((prevContacts) => {
-    //   const newContact = {
-    //     id: `${uuidv4()}`,
-    //     name,
-    //     number,
-    //   };
     const duplicateContact = contacts.find((contact) => {
       return contact.name === name;
     });
@@ -44,21 +23,17 @@ export default function App() {
     }
   };
 
-  const onDelete = (contactId) => {
-    return dispatch(deleteContact(contactId));
-  };
-
   const setFilterToState = (filterData) => {
     return dispatch(filterContact(`${filterData}`));
   };
 
-  const onFilter = () => {
+  const filterbyContacts = () => {
     return contacts.filter((contact) =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
   };
 
-  const filterContacts = onFilter();
+  const filterContacts = filterbyContacts();
 
   return (
     <Conteiner>
@@ -66,7 +41,10 @@ export default function App() {
       <ContactForm onSubmit={formSubmit} />
       <h1>Contacts</h1>
       <Filter setFilterToState={setFilterToState} />
-      <ContactList contacts={filterContacts} onDelete={onDelete} />
+      <ContactList
+        contacts={filterContacts}
+        onDelete={(id) => dispatch(deleteContact(id))}
+      />
     </Conteiner>
   );
 }

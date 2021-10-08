@@ -1,27 +1,16 @@
-import {
-  ADD_CONTACT,
-  DELETE_CONTACT,
-  FIND_CONTACT,
-  INIT_STORE,
-} from "redux/actionType";
+import { createAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
-export const addContact = (name, number) => ({
-  type: ADD_CONTACT,
-  payload: { id: `${uuidv4()}`, name, number },
+export const addContact = createAction("ADD_CONTACT", (name, number) => {
+  return {
+    payload: {
+      id: `${uuidv4()}`,
+      name,
+      number,
+    },
+  };
 });
 
-export const deleteContact = (contactId) => ({
-  type: DELETE_CONTACT,
-  payload: contactId,
-});
+export const deleteContact = createAction("DELETE_CONTACT");
 
-export const filterContact = (filterName) => ({
-  type: FIND_CONTACT,
-  payload: filterName,
-});
-
-export const initStore = (store) => ({
-  type: INIT_STORE,
-  payload: store,
-});
+export const filterContact = createAction("FILTER_CONTACT");

@@ -20,7 +20,7 @@ const conatcsPersistConfig = {
 
 export const store = configureStore({
   reducer: {
-    contacts: persistReducer(conatcsPersistConfig, rootReducer),
+    phonebook: persistReducer(conatcsPersistConfig, rootReducer),
   },
   devTools: process.env.NODE_ENV === "development",
   middleware: (getDefaultMiddleware) =>

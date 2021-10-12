@@ -1,10 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { getContacts, getFilter } from "redux/contacts-selectors";
-import {
-  addContact,
-  deleteContact,
-  filterContact,
-} from "redux/contacts-actions";
+import { addContact, filterContact } from "redux/contacts-actions";
 import ContactForm from "components/ContactForm/ContactForm";
 import ContactList from "components/ContactList/ContactList";
 import Filter from "components/Filter/Filter";
@@ -45,10 +41,7 @@ export default function App() {
       <ContactForm onSubmit={formSubmit} />
       <h1>Contacts</h1>
       <Filter setFilterToState={setFilterToState} />
-      <ContactList
-        contacts={filterContacts}
-        onDelete={(id) => dispatch(deleteContact(id))}
-      />
+      <ContactList contacts={filterContacts} />
     </Container>
   );
 }
